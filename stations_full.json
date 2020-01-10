@@ -1,0 +1,206 @@
+{
+	"line": "East-West Line",
+	"short_name": "EW",
+	"direction": "right",
+	"stations": [
+		{
+			"station_code": "EW1",
+			"station_name": "Pasir Ris",
+			"time": 0
+		},
+		{
+			"station_code": "EW2",
+			"station_name": "Tampines",
+			"interchange": [
+				"DT32"
+			],
+			"time": 4
+		},
+		{
+			"station_code": "EW3",
+			"station_name": "Simei",
+			"time": 2
+		},
+		{
+			"station_code": "EW4",
+			"station_name": "Tanah Merah",
+			"interchange": [
+				"CG"
+			],
+			"time": 3
+		},
+		{
+			"station_code": "EW5",
+			"station_name": "Bedok",
+			"time": 2
+		},
+		{
+			"station_code": "EW6",
+			"station_name": "Kembangan",
+			"time": 3
+		},
+		{
+			"station_code": "EW7",
+			"station_name": "Eunos",
+			"time": 2
+		},
+		{
+			"station_code": "EW8",
+			"station_name": "Paya Lebar",
+			"interchange": [
+				"CC9"
+			],
+			"time": 2
+		},
+		{
+			"station_code": "EW9",
+			"station_name": "Aljunied",
+			"time": 1
+		},
+		{
+			"station_code": "EW10",
+			"station_name": "Kallang",
+			"time": 2
+		},
+		{
+			"station_code": "EW11",
+			"station_name": "Lavender",
+			"time": 2
+		},
+		{
+			"station_code": "EW12",
+			"station_name": "Bugis",
+			"interchange": [
+				"DT14"
+			],
+			"time": 2
+		},
+		{
+			"station_code": "EW13",
+			"station_name": "City Hall",
+			"interchange": [
+				"NS25"
+			],
+			"time": 2
+		},
+		{
+			"station_code": "EW14",
+			"station_name": "Raffles Place",
+			"interchange": [
+				"NS26"
+			],
+			"time": 2
+		},
+		{
+			"station_code": "EW15",
+			"station_name": "Tanjong Pagar",
+			"time": 2
+		},
+		{
+			"station_code": "EW16",
+			"station_name": "Outram Park",
+			"interchange": [
+				"NE3"
+			],
+			"time": 2
+		},
+		{
+			"station_code": "EW17",
+			"station_name": "Tiong Bahru",
+			"time": 2
+		},
+		{
+			"station_code": "EW18",
+			"station_name": "Redhill",
+			"time": 2
+		},
+		{
+			"station_code": "EW19",
+			"station_name": "Queenstown",
+			"time": 3
+		},
+		{
+			"station_code": "EW20",
+			"station_name": "Commonwealth",
+			"time": 2
+		},
+		{
+			"station_code": "EW21",
+			"station_name": "Buona Vista",
+			"interchange": [
+				"CC22"
+			],
+			"time": 2
+		},
+		{
+			"station_code": "EW22",
+			"station_name": "Dover",
+			"time": 2
+		},
+		{
+			"station_code": "EW23",
+			"station_name": "Clementi",
+			"time": 3
+		},
+		{
+			"station_code": "EW24",
+			"station_name": "Jurong East",
+			"interchange": [
+				"NS1"
+			],
+			"time": 4
+		},
+		{
+			"station_code": "EW25",
+			"station_name": "Chinese Garden ",
+			"time": 2
+		},
+		{
+			"station_code": "EW26",
+			"station_name": "Lakeside",
+			"time": 2
+		},
+		{
+			"station_code": "EW27",
+			"station_name": "Boon Lay",
+			"time": 2
+		},
+		{
+			"station_code": "EW28",
+			"station_name": "Pioneer ",
+			"time": 2
+		},
+		{
+			"station_code": "EW29",
+			"station_name": "Joo Koon",
+			"time": 4
+		},
+		{
+			"station_code": "EW30",
+			"station_name": "Gul Circle",
+			"time": 2
+		},
+		{
+			"station_code": "EW31",
+			"station_name": "Tuas Crescent",
+			"time": 2
+		},
+		{
+			"station_code": "EW32",
+			"station_name": "Tuas West Road",
+			"time": 2
+		},
+		{
+			"station_code": "EW33",
+			"station_name": "Tuas Link"
+		}
+	],
+	"lines": {
+		"EW": "#009645",
+		"CG": "#009645",
+		"NS": "#d42e12",
+		"NE": "#9900aa",
+		"CC": "#fa9e0d",
+		"DT": "#005ec4"
+	}
+}

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		:root {
+			font-size: 32px;
+		}
+		*, *:before, *:after {
+			box-sizing: border-box;
+		}
+		body {
+			font-family: Roboto, serif;
+			margin: 0;
+		}
+		#header {
+			position: fixed;
+			width: 100%;
+			display: flex;
+		}
+		.pill {
+			display: inline-block;
+			border-radius: 100px;
+			color: #fff;
+			white-space: nowrap;
+			vertical-align: middle;
+			margin-right: 3px;
+		}
+		.pill div {
+			display: inline-block;
+		}
+		.pill div:first-child {
+			background-color: var(--line-color);
+			color: #fff;
+			border-radius: 100px 0 0 100px;
+		}
+		.pill div:last-child {
+			border-radius: 0 100px 100px 0;
+		}
+		.pill div:only-child {
+			border-radius: 100px;
+		}
+		#towards {
+			background-color: #000;
+			color: #fff;
+			padding: 48px 12px;
+			position: relative;
+		}
+		#towards:after {
+			position: absolute;
+			top: 0;
+			left: 100%;
+			width: 0;
+			height: 0;
+			content: '';
+			display: block;
+			border-top: calc(var(--towards-height) / 2) solid transparent;
+			border-bottom: calc(var(--towards-height) / 2) solid transparent;
+			border-left: 25px solid #000;
+		}
+		#towards-dynamic {
+			margin-top: 6px;
+		}
+		#towards-line {
+			float: right;
+			color: var(--line-color);
+		}
+		#towards-pill {
+			display: inline-block;
+			;
+			font-size: 1.25rem;
+			margin-right: 6px;
+		}
+		#towards-pill div {
+			padding: 0 8px;
+		}
+		#towards-pill div:first-child {
+			padding: 0 8px 0 16px;
+		}
+		#towards-pill div:last-child {
+			padding: 0 16px 0 8px;
+		}
+		#towards-pill div:only-child {
+			padding: 0 16px;
+		}
+		#towards-station {
+			display: inline-block;
+			font-size: 1.5rem;
+			vertical-align: middle;
+		}
+		#next {
+			height: var(--towards-height);
+			border-bottom: 6px solid #000;
+			padding: 12px;
+			padding-left: 37px;
+			flex-grow: 1;
+			display: grid;
+			grid-template-columns: auto 1fr;
+			grid-template-rows: auto 1fr auto;
+			grid-column-gap: 16px;
+			grid-row-gap: 8px;
+		}
+		#next-time {
+			text-align: right;
+		}
+		#next-station-parent {
+			grid-column: 1 / span 2;
+			text-align: center;
+		}
+		#time-now, #doors-open {
+			font-size: .8rem;
+			opacity: .75;
+		}
+		#doors-open {
+			text-align: right;
+		}
+		#next-pill {
+			display: inline-block;
+			font-size: 1.75rem;
+			margin-right: 6px;
+		}
+		#next-pill div {
+			padding: 0 8px;
+		}
+		#next-pill div:first-child {
+			padding: 0 8px 0 16px;
+		}
+		#next-pill div:last-child {
+			padding: 0 16px 0 8px;
+		}
+		#next-pill div:only-child {
+			padding: 0 16px;
+		}
+		#next-station {
+			display: inline-block;
+			font-size: 2rem;
+			vertical-align: middle;
+		}
+
+		#map {
+			padding-top: var(--towards-height);
+		}
+		.map-backbone {
+			height: 12px;
+			background-color: var(--line-color);
+			/* background-image: linear-gradient(to var(--direction), #ccc, #ccc 73%, var(--line-color) 73%, var(--line-color)); */
+			transform: translateY(300px);
+			margin-bottom: 300px;
+			padding-left: 12px;
+			padding-right: var(--station-margin);
+			display: flex;
+			justify-content: space-between;
+			position: relative;
+		}
+		.map-station {
+			display: inline-block;
+			transform-origin: 0 0;
+			transform: rotate(-40deg);
+			width: 48px;
+			height: 48px;
+			white-space: nowrap;
+			color: rgba(0, 0, 0, .8);
+		}
+		.map-station .pill {
+			opacity: .8;
+		}
+		.map-station .pill div {
+			padding: 0 5px;
+		}
+		.map-station .pill div:first-child {
+			padding: 0 5px 0 12px;
+		}
+		.map-station .pill div:last-child {
+			padding: 0 12px 0 5px;
+		}
+		.map-station .pill div:only-child {
+			padding: 0 12px;
+		}
+		.map-circle {
+			border-radius: 50%;
+			height: 48px;
+			width: 48px;
+			display: inline-block;
+			vertical-align: middle;
+			border: 6px solid var(--line-color);
+			background-color: #fff;
+			position: relative;
+			text-align: center;
+			margin-right: 6px;
+		}
+		.map-circle span {
+			font-size: .7rem;
+			transform: rotate(40deg);
+			display: inline-block;
+			vertical-align: middle;
+			margin-top: -12px;
+		}
+		.map-station.next {
+			color: #000;
+		}
+		.map-station.next .pill {
+			opacity: 1;
+		}
+		.map-station.next .map-circle {
+			border-color: #d32e12;
+			color: #000;
+		}
+		.map-station.passed .map-circle {
+			border-color: #aaa;
+		}
+		.map-station.passed {
+			color: rgba(0, 0, 0, .5);
+		}
+		.map-station.passed .pill {
+			opacity: .5;
+		}
+
+		marquee {
+			position: fixed;
+			width: 100%;
+			left: 0;
+			bottom: 0;
+			background-color: #212121;
+			color: #fff;
+			padding-bottom: 4px;
+		}
+		.map-backbone:first-child {
+			z-index: 1;
+		}
+	</style>
+</head>
+<body>
+	<section id='header'>
+		<div id='towards'>
+			Towards
+			<span id='towards-line'></span>
+			<div id='towards-dynamic'>
+				<div id='towards-pill' class='pill'></div>
+				<div id='towards-station'></div>
+			</div>
+		</div>
+		<div id='next'>
+			<div id='next-text'>Next Station</div>
+			<div id='next-time'></div>
+			<div id='next-station-parent'>
+				<div id='next-pill' class='pill'></div>
+				<div id='next-station'></div>
+			</div>
+			<div id='time-now'></div>
+			<div id='doors-open'>Doors opening on <strong>this side</strong></div>
+		</div>
+	</section>
+	<section id='map'></section>
+	<!-- <marquee>如果您发现有任何行迹可疑的人物，请通知我们的职员，或按车厢门边的紧急联络钮，与我们通话。</marquee> -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js'></script>
+	<script>
+		const SOCKET = io();
+		document.addEventListener('DOMContentLoaded', () => {
+			fetch('stations.json').then(res => res.json()).then(data => {
+				document.body.style.setProperty('--line-color', data.lines[data.short_name]);
+				document.body.style.setProperty('--direction', data.direction);
+
+				document.getElementById('towards-line').appendChild(document.createTextNode(data.line));
+
+				const LAST_STATION = data.stations[data.direction == 'left' ? 0 : data.stations.length - 1];
+				const TOWARDS_PILL_MAIN = document.createElement('div');
+				TOWARDS_PILL_MAIN.appendChild(document.createTextNode(LAST_STATION.station_code));
+				document.getElementById('towards-pill').appendChild(TOWARDS_PILL_MAIN);
+				if (LAST_STATION.interchange) {
+					for (let code of LAST_STATION.interchange) {
+						const TOWARDS_PILL_INT = document.createElement('div');
+						TOWARDS_PILL_INT.appendChild(document.createTextNode(code));
+						TOWARDS_PILL_INT.style.backgroundColor = data.lines[code.substr(0, 2)];
+						document.getElementById('towards-pill').appendChild(TOWARDS_PILL_INT);
+					}
+				}
+				document.getElementById('towards-station').appendChild(document.createTextNode(LAST_STATION.station_name));
+
+				let previousTime = 0;
+				function newStation(station) {
+					const ELEMENT = document.createElement('div');
+					ELEMENT.classList.add('map-station');
+
+					const CIRCLE = document.createElement('div');
+					CIRCLE.classList.add('map-circle');
+
+					const CIRCLE_TIME = document.createElement('span');
+					CIRCLE_TIME.appendChild(document.createTextNode(Math.round((station.time + previousTime) / 60)));
+					CIRCLE.appendChild(CIRCLE_TIME);
+					previousTime += station.time;
+
+					const PILL = document.createElement('div');
+					PILL.classList.add('pill');
+					const PILL_MAIN = document.createElement('div');
+					PILL_MAIN.appendChild(document.createTextNode(station.station_code));
+					PILL.appendChild(PILL_MAIN);
+					if (station.interchange) {
+						for (let code of station.interchange) {
+							const PILL_INT = document.createElement('div');
+							PILL_INT.appendChild(document.createTextNode(code));
+							PILL_INT.style.backgroundColor = data.lines[code.substr(0, 2)];
+							PILL.appendChild(PILL_INT);
+						}
+					}
+
+					ELEMENT.appendChild(CIRCLE);
+					ELEMENT.appendChild(PILL);
+					ELEMENT.appendChild(document.createTextNode(station.station_name));
+
+					return ELEMENT;
+				}
+
+				if (data.stations.length >= 20) {
+					const AVERAGE = Math.ceil(data.stations.length / 2);
+					const LINE_1 = document.createElement('div');
+					LINE_1.classList.add('map-backbone');
+					for (let i = 0; i < AVERAGE; i++) LINE_1.appendChild(newStation(data.stations[i]));
+
+					const LINE_2 = document.createElement('div');
+					LINE_2.classList.add('map-backbone');
+					for (let i = AVERAGE; i < data.stations.length; i++) LINE_2.appendChild(newStation(data.stations[i]));
+
+					document.getElementById('map').appendChild(LINE_1);
+					document.getElementById('map').appendChild(LINE_2);
+				}
+				else {
+					const LINE = document.createElement('div');
+					LINE.classList.add('map-backbone');
+					for (let i = 0; i < data.stations.length; i++) LINE.appendChild(newStation(data.stations[i]));
+					document.getElementById('map').appendChild(LINE);
+				}
+				document.body.style.setProperty('--towards-height', `${document.getElementById('towards').clientHeight}px`);
+				const MAP_LINE = document.getElementsByClassName('map-backbone');
+				for (let i = MAP_LINE.length - 1; i >= 0; i -= 1) {
+					MAP_LINE[i].style.setProperty('--station-margin', `${0.76604444312 * MAP_LINE[i].children[MAP_LINE[i].children.length - 1].scrollWidth}px`);
+				}
+
+				const NEXT_STATION_TIME = document.getElementById('next-time');
+				const STATION_ELEMENTS = document.getElementsByClassName('map-station');
+				let nextStation = 0;
+
+				SOCKET.on('stationTime', time => {
+					let previousTime = 0;
+					let timeMin = Math.round(time / 60);
+					if (timeMin == 0) {
+						for (let i = STATION_ELEMENTS.length - 1; i >= 0; i -= 1) {
+
+						}
+						STATION_ELEMENTS[nextStation].getElementsByTagName('span')[0].innerHTML = '';
+						NEXT_STATION_TIME.innerHTML = `Arriving soon`;
+					}
+					else {
+						STATION_ELEMENTS[nextStation].getElementsByTagName('span')[0].innerHTML = timeMin;
+						NEXT_STATION_TIME.innerHTML = `Arriving in ${timeMin} minute${timeMin == 1 ? '' : 's'}`;
+					}
+					for (let i = nextStation + 1; i < STATION_ELEMENTS.length; i++) {
+						STATION_ELEMENTS[i].getElementsByTagName('span')[0].innerHTML = Math.round((data.stations[i].time + time) / 60);
+						time += data.stations[i].time;
+					}
+				});
+				SOCKET.on('doorsClosing', () => {
+					console.warn('Doors Closing');
+				});
+				const NEXT_PILL = document.getElementById('next-pill');
+				SOCKET.on('nextStation', next => {
+					nextStation = next;
+					while (NEXT_PILL.firstChild) NEXT_PILL.removeChild(NEXT_PILL.firstChild);
+					const PILL_MAIN = document.createElement('div');
+					PILL_MAIN.appendChild(document.createTextNode(data.stations[next].station_code));
+					NEXT_PILL.appendChild(PILL_MAIN);
+					if (data.stations[next].interchange) {
+						for (let code of data.stations[next].interchange) {
+							const PILL_INT = document.createElement('div');
+							PILL_INT.appendChild(document.createTextNode(code));
+							PILL_INT.style.backgroundColor = data.lines[code.substr(0, 2)];
+							NEXT_PILL.appendChild(PILL_INT);
+						}
+					}
+					document.getElementById('next-station').innerHTML = data.stations[next].station_name;
+					if (STATION_ELEMENTS[next - 1]) STATION_ELEMENTS[next - 1].classList.add('passed');
+					STATION_ELEMENTS[next].classList.add('next');
+				});
+			});
+
+			setInterval(() => {
+				const TIME = new Date();
+				let dateSuffix;
+				switch (TIME.getDate().toString().slice(-1)) {
+					case 1:
+						dateSuffix = "st";
+						break;
+					case 2:
+						dateSuffix = "nd";
+						break;
+					case 3:
+						dateSuffix = "rd";
+						break;
+					default:
+						dateSuffix = "th"
+				};
+				let hour = TIME.getHours();
+				if (hour == 0) {
+					hour = '12';
+					hourSuffix = 'AM';
+				}
+				else if (hour < 10) {
+					hour = `0${hour}`;
+					hourSuffix = 'AM';
+				}
+				else if (hour < 12)
+					hourSuffix = 'AM';
+				else if (hour == 12)
+					hourSuffix = 'PM';
+				else if (hour < 22) {
+					hour = `0${hour - 12}`;
+					hourSuffix = 'PM';
+				}
+				else {
+					hour = hour - 12;
+					hourSuffix = 'PM';
+				}
+
+				document.getElementById('time-now').innerHTML = `${hour}:${TIME.getMinutes().toString().length < 2 ? "0" + TIME.getMinutes().toString() : TIME.getMinutes()} ${hourSuffix}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][TIME.getDay()]}, ${TIME.getDate()}<sup>${dateSuffix}</sup> ${["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][TIME.getMonth()]} ${TIME.getFullYear()}`;
+			}, 100);
+		});
+	</script>
+</body>
+</html>
