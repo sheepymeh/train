@@ -1,15 +1,19 @@
 {
-  "name": "train",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1",
-    "socket.io": "^2.2.0"
-  }
+	"name": "train",
+	"version": "1.0.0",
+	"description": "WebSockets-based In-Train Passenger Information System",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/sheepymeh/train.git"
+	},
+	"author": "sheepymeh",
+	"license": "MIT",
+	"dependencies": {
+		"express": "^4.17.1",
+		"socket.io": "^2.2.0"
+	}
 }
